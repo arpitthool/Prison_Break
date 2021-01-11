@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class QuestionController
+class QuestionController extends AbstractController
 {
     /**
      * @Route("/")
@@ -20,8 +21,15 @@ class QuestionController
      */
     public function show($quora)
     {
-        return new Response( sprintf(
-            "Answers for '%s' are coming soon!",
-            ucwords( str_replace( '-', ' ', $quora))));
+        $answers = [
+            'Bribe the guard',
+            'Beat the quard',
+            'Trick the guard'
+        ];
+
+        return $this->render('question/show.html.twig',[
+            'question' => ucwords( str_replace( '-', ' ', $quora)),
+            'answers' => $answers
+        ]);
     }
 }
