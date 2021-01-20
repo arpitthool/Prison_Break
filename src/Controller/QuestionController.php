@@ -27,7 +27,7 @@ class QuestionController extends AbstractController
     public function show($question, MarkdownParserInterface $markdownParser)
     {
         $answers = [
-            '<html></html>Bribe the `guard`',
+            'Bribe the `guard`',
             'Beat the `quard`',
             'Trick the `guard`'
         ];
