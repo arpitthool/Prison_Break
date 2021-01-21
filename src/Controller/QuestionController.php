@@ -32,12 +32,11 @@ class QuestionController extends AbstractController
             'Beat the `quard`',
             'Trick the `guard`'
         ];
-        $questionText = "I've been turned into a cat, any thoughts on how to turn back? While I'm **adorable**, I don't really care for cat food.";
+        $questionText = "I've been turned into a cat, any *thoughts* on how to turn back? While I'm **adorable**, I don't really care for cat food.";
         
         $parsedQuestionText = $cache->get('markdown_'.md5($questionText), function() use ($markdownParser, $questionText){
             return $markdownParser->transformMarkdown($questionText);
         });
-        //$parsedQuestionText = $markdownParser->transformMarkdown($questionText);
         
         return $this->render('question/show.html.twig',[
             'question' => ucwords( str_replace( '-', ' ', $question)),
