@@ -6,6 +6,7 @@ use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Cache\CacheInterface;
 use Twig\Environment;
 
 class QuestionController extends AbstractController
@@ -24,7 +25,7 @@ class QuestionController extends AbstractController
     /**
      * @Route("/questions/{question}", name="app_question_show")
      */
-    public function show($question, MarkdownParserInterface $markdownParser)
+    public function show($question, MarkdownParserInterface $markdownParser, CacheInterface $cache)
     {
         $answers = [
             'Bribe the `guard`',
@@ -32,7 +33,11 @@ class QuestionController extends AbstractController
             'Trick the `guard`'
         ];
         $questionText = "I've been turned into a cat, any thoughts on how to turn back? While I'm **adorable**, I don't really care for cat food.";
-        $parsedQuestionText = $markdownParser->transformMarkdown($questionText);
+        
+        $parsedQuestionText = $cache->get('markdown_'.md5($questionText), function() use ($markdownParser, $questionText){
+            return $markdownParser->transformMarkdown($questionText);
+        });
+        //$parsedQuestionText = $markdownParser->transformMarkdown($questionText);
         
         return $this->render('question/show.html.twig',[
             'question' => ucwords( str_replace( '-', ' ', $question)),
